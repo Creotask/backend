@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "app/generated/prisma/client"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  email          String       @unique
+  password       String
+  name           String
+  role           Role
+  profile        Profile?
+  projects       Project[]    @relation("ClientProjects")
+  submissions    Submission[]
+  membership     Membership?
+  userCourses    UserCourse[]
+  points         Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@map("users")
+}
+
+model Profile {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @unique @db.ObjectId
+  bio         String?
+  skills      String[]
+  portfolio   String[]
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("profiles")
+}
+
+model Project {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String
+  budget         Float
+  deadline       DateTime
+  clientId       String        @db.ObjectId
+  client         User          @relation("ClientProjects", fields: [clientId], references: [id])
+  submissions    Submission[]
+  winnerId       String?       @db.ObjectId
+  createdAt      DateTime      @default(now())
+
+  @@map("projects")
+}
+
+model Submission {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  projectId   String    @db.ObjectId
+  userId      String    @db.ObjectId
+  contentUrl  String
+  submittedAt DateTime  @default(now())
+  isWinner    Boolean   @default(false)
+  project     Project   @relation(fields: [projectId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@map("submissions")
+}
+
+model Membership {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String         @unique @db.ObjectId
+  type        MembershipType
+  startDate   DateTime
+  endDate     DateTime
+  perks       String[]
+  user        User           @relation(fields: [userId], references: [id])
+
+  @@map("memberships")
+}
+
+model Course {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  description  String
+  level        String
+  contentUrl   String
+  userCourses  UserCourse[]
+  createdAt    DateTime     @default(now())
+
+  @@map("courses")
+}
+
+model UserCourse {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  courseId  String   @db.ObjectId
+  completed Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+
+  @@map("user_courses")
+}
+
+enum Role {
+  FREELANCER
+  CLIENT
+  ADMIN
+}
+
+enum MembershipType {
+  FREE
+  GOLD
+  PLATINUM
+}
