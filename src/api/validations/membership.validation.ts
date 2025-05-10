@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MembershipType } from '../../prisma/app/generated/prisma/client';
+import { MembershipType } from '@prisma/client';
 
 /**
  * Validation schemas for membership routes using Zod

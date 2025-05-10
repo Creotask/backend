@@ -191,7 +191,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/mnt/creotask/Creotask-server/backend/prisma/app/generated/prisma/client",
+      "value": "/mnt/creotask/backend/prisma/app/generated/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -205,7 +205,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/mnt/creotask/Creotask-server/backend/prisma/schema.prisma",
+    "sourceFilePath": "/mnt/creotask/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -223,7 +223,7 @@ const config = {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "mongodb+srv://agnet2:khush123@cluster0.vtwkj.mongodb.net/creotask"
+        "value": "mongodb://localhost:27017/creotask?replicaSet=rs0"
       }
     }
   },

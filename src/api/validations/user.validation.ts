@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Role } from '../../prisma/app/generated/prisma/client';
+import { Role } from '@prisma/client';
 
 /**
  * Validation schemas for user routes using Zod
